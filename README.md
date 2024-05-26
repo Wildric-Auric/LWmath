@@ -1,2 +1,1 @@
-# congenial-rotary-phone
-Lightweight single header mathematical library for graphics.
+Mainly based on NWengine internal mathematical library, with fixes and extra features.
