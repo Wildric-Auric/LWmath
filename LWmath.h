@@ -191,11 +191,14 @@ public:
 	Vector3<float> normalize() const;
 	float magnitude();
 	T Dot(Vector3 const& vec1);
+    Vector3<T> Cross(Vector3 const&);
 
 	Vector3 Project(Vector3 const& vec1);
 
 	Vector3 operator + (Vector3 const& vec1);
 	Vector3 operator + (T const& num);
+    Vector3 operator - (Vector3 const& vec1);
+    Vector3 operator - (T const& num);
 	Vector3 operator * (T const& num);
 	Vector3 operator * (Vector3 const& vec1);
 	bool operator == (Vector3 const& vec1);
@@ -205,6 +208,9 @@ public:
 template<typename T>
 Vector3<float> Vector3<T>::normalize() const {
 	float magnitude = pow(x * x + y * y + z * z, 0.5);
+	if (magnitude == 0) {
+		return *this;
+	}
 	return Vector3<float>(x / magnitude, y / magnitude, z / magnitude);
 }
 template<typename T>
@@ -215,6 +221,15 @@ template<typename T>
 T Vector3<T>::Dot(Vector3 const& vec1) {
 	return x * vec1.x + y * vec1.y + z * vec1.z;
 };
+
+template<typename T> 
+Vector3<T> Vector3<T>::Cross(Vector3 const& vec1) {
+    return {
+      y * vec1.z - z * vec1.y,
+      z * vec1.x - x * vec1.z,
+      x * vec1.y - y * vec1.x
+    };
+}
 
 template<typename T>
 //Vec1 should be normalized
@@ -250,6 +265,24 @@ Vector3<T> Vector3<T>::operator + (T const& num) {
 	newVec.x = x + num;
 	newVec.y = y + num;
 	newVec.z = z + num;
+	return newVec;
+}
+
+template<typename T>
+Vector3<T> Vector3<T>::operator - (T const& num) {
+	Vector3 newVec;
+	newVec.x = x - num;
+	newVec.y = y - num;
+	newVec.z = z - num;
+	return newVec;
+}
+
+template<typename T>
+Vector3<T> Vector3<T>::operator - (Vector3 const& vec1) {
+	Vector3 newVec;
+	newVec.x = x - vec1.x;
+	newVec.y = y - vec1.y;
+	newVec.z = z - vec1.z;
 	return newVec;
 }
 
@@ -510,9 +543,7 @@ T Matrix3<T>::operator()(int i, int j) {
 
 //4x4--------------------------
 template<typename T>
-class Matrix4 {
-public:
-	T values[16]; //Column major
+class Matrix4 { public: T values[16]; //Column major
 	Matrix4();
 	Matrix4(T diag);
 	Matrix4(MATFLAG flag);
@@ -564,7 +595,7 @@ template<typename T>
 void Matrix4<T>::operator *= (const Matrix4<T>& other) {
 	Matrix4<T> result = Matrix4(MATFLAG::NOINIT);
 	TMP_MAT_4x4_MUL
-	this->values = memcpy(this->values, result.values, 4 * sizeof(T))
+	this->values = memcpy(this->values, result.values, 4 * sizeof(T));
 }
 #undef TMP_MAT_4x4_MUL
 
@@ -611,6 +642,35 @@ inline void PerspectiveMat(Matrix4<float>& matrix, float degreeFovY,float aspect
     matrix.values[15]  = 0.0f;
 }
 //TODO::Add perspective matrix that takes width and height as args
+
+template<typename T> 
+void LookAt(Matrix4<T>&matrix, const Vector3<T>& camPos, const Vector3<T>& targetPos, const Vector3<T>& upVec) { 
+	//TODO::Test this
+	//TODO::const version
+	Vector3<T> up	  = upVec;
+	Vector3<T> target = targetPos;
+	Vector3<T> cameraPosition = camPos;
+    Vector3<T> dir   = (cameraPosition - target).normalize();
+  
+    Vector3<T> right  = up.Cross(dir);
+    Vector3<T> u      = dir.Cross(right);
+
+    matrix.values[0]  = right.x;
+    matrix.values[1]  = u.x;
+    matrix.values[2]  = dir.x;
+
+    matrix.values[4]  = right.y;
+    matrix.values[5]  = u.y ;
+    matrix.values[6]  = dir.y;
+
+    matrix.values[8]  = right.z ;
+    matrix.values[9]  = u.z;
+    matrix.values[10] = dir.z ;
+
+    matrix.values[12] =  -right.Dot(camPos);
+    matrix.values[13]  = -u.Dot(camPos);
+    matrix.values[14]  = -dir.Dot(camPos);
+}
 
 template<typename T>
 void TranslateMat(Matrix4<T>&matrix, const Vector3<T>& coeff) {
@@ -738,3 +798,4 @@ template<typename T>
 T Det2(Vector2<T> a, Vector2<T> b) {
 	return a.x * b.y - a.y * b.x;
 }
+
