@@ -32,20 +32,20 @@ public:
 	Vector2 Project(Vector2 const& vec1);
 	Vector2 Rotate(float const& angle); //In degree
 
-	Vector2 operator + (Vector2 const& vec1);
-	Vector2 operator + (T const& num);
-	Vector2 operator - (Vector2 const& vec1);
-	Vector2 operator - (T const& num);
+	Vector2 operator + (Vector2 const& vec1) const;
+	Vector2 operator + (T const& num)        const;
+	Vector2 operator - (Vector2 const& vec1) const;
+	Vector2 operator - (T const& num)        const;
 	template<typename T1>
-	Vector2 operator * (T1 const& num);
-	Vector2 operator * (Vector2 const& vec1);
-	bool operator == (Vector2 const& vec1);
-	bool operator != (Vector2 const& vec1);
+	Vector2 operator * (T1 const& num)       const;
+	Vector2 operator * (Vector2 const& vec1) const;
+	bool operator == (Vector2 const& vec1)   const;
+	bool operator != (Vector2 const& vec1)   const;
 	
 	operator Vector2<int>() const { return Vector2<int>(x,y); }
 	operator Vector2<float>() const { return Vector2<float>(x, y); }
 
-	T* operator [] (int index);
+	T* operator [] (int index) const;
 };
 
 
@@ -85,14 +85,14 @@ Vector2<T>::Vector2(T x, T y) {
 	Vector2::y = y;
 }
 template<typename T>
-Vector2<T> Vector2<T>::operator + (Vector2 const& vec1) {
+Vector2<T> Vector2<T>::operator + (Vector2 const& vec1) const {
 	Vector2 sum;
 	sum.x = x + vec1.x;
 	sum.y = y + vec1.y;
 	return sum;
 }
 template<typename T>
-Vector2<T> Vector2<T>::operator - (Vector2 const& vec1) {
+Vector2<T> Vector2<T>::operator - (Vector2 const& vec1) const {
 	Vector2 sub;
 	sub.x = x - vec1.x;
 	sub.y = y - vec1.y;
@@ -100,21 +100,21 @@ Vector2<T> Vector2<T>::operator - (Vector2 const& vec1) {
 }
 
 template<class T>
-Vector2<T> Vector2<T>::operator * (Vector2 const& vec1) {
+Vector2<T> Vector2<T>::operator * (Vector2 const& vec1) const {
 	Vector2 newVec;
 	newVec.x = x * vec1.x;
 	newVec.y = y * vec1.y;
 	return newVec;
 }
 template<typename T> 
-Vector2<T> Vector2<T>::operator + (T const& num) {
+Vector2<T> Vector2<T>::operator + (T const& num) const {
 	Vector2 newVec;
 	newVec.x = x + num;
 	newVec.y = y + num;
 	return newVec;
 }
 template<typename T>
-Vector2<T> Vector2<T>::operator - (T const& num) {
+Vector2<T> Vector2<T>::operator - (T const& num) const {
 	Vector2 newVec;
 	newVec.x = x - num;
 	newVec.y = y - num;
@@ -123,7 +123,7 @@ Vector2<T> Vector2<T>::operator - (T const& num) {
 
 template<typename T>
 template<typename T1>
-Vector2<T> Vector2<T>::operator * (T1 const& num) {
+Vector2<T> Vector2<T>::operator * (T1 const& num) const {
 	Vector2 newVec;
 	newVec.x = x * num;
 	newVec.y = y * num;
@@ -131,17 +131,17 @@ Vector2<T> Vector2<T>::operator * (T1 const& num) {
 }
 			
 template<typename T>
-bool Vector2<T>::operator == (Vector2 const& vec1) {
+bool Vector2<T>::operator == (Vector2 const& vec1) const {
 	return (x == vec1.x) && (y == vec1.y);
 }
 
 template<typename T>
-bool Vector2<T>::operator != (Vector2 const& vec1) {
+bool Vector2<T>::operator != (Vector2 const& vec1) const {
 	return (x != vec1.x) && (y != vec1.y);
 }
 
 template<typename T> 
-T* Vector2<T>::operator [] (int index) {
+T* Vector2<T>::operator [] (int index) const {
 	return  index == 0 ? &x : &y;
 }
 
@@ -195,14 +195,14 @@ public:
 
 	Vector3 Project(Vector3 const& vec1);
 
-	Vector3 operator + (Vector3 const& vec1);
-	Vector3 operator + (T const& num);
-    Vector3 operator - (Vector3 const& vec1);
-    Vector3 operator - (T const& num);
-	Vector3 operator * (T const& num);
-	Vector3 operator * (Vector3 const& vec1);
-	bool operator == (Vector3 const& vec1);
-	bool operator != (Vector3 const& vec1);
+	Vector3 operator + (Vector3 const& vec1) const;
+	Vector3 operator + (T const& num)		 const;
+    Vector3 operator - (Vector3 const& vec1) const;
+    Vector3 operator - (T const& num)        const;
+	Vector3 operator * (T const& num)        const; 
+	Vector3 operator * (Vector3 const& vec1) const;
+	bool operator == (Vector3 const& vec1)   const;
+	bool operator != (Vector3 const& vec1)   const;
 };
 
 template<typename T>
@@ -244,7 +244,7 @@ Vector3<T>::Vector3(T x, T y, T z) {
 	Vector3::z = z;
 }
 template<typename T>
-Vector3<T> Vector3<T>::operator + (Vector3 const& vec1) {
+Vector3<T> Vector3<T>::operator + (Vector3 const& vec1) const {
 	Vector3 sum;
 	sum.x = x + vec1.x;
 	sum.y = y + vec1.y;
@@ -252,7 +252,7 @@ Vector3<T> Vector3<T>::operator + (Vector3 const& vec1) {
 	return sum;
 }
 template<typename T>
-Vector3<T> Vector3<T>::operator * (Vector3 const& vec1) {
+Vector3<T> Vector3<T>::operator * (Vector3 const& vec1) const {
 	Vector3 newVec;
 	newVec.x = x * vec1.x;
 	newVec.y = y * vec1.y;
@@ -260,7 +260,7 @@ Vector3<T> Vector3<T>::operator * (Vector3 const& vec1) {
 	return newVec;
 }
 template<typename T>
-Vector3<T> Vector3<T>::operator + (T const& num) {
+Vector3<T> Vector3<T>::operator + (T const& num) const {
 	Vector3 newVec;
 	newVec.x = x + num;
 	newVec.y = y + num;
@@ -269,7 +269,7 @@ Vector3<T> Vector3<T>::operator + (T const& num) {
 }
 
 template<typename T>
-Vector3<T> Vector3<T>::operator - (T const& num) {
+Vector3<T> Vector3<T>::operator - (T const& num) const {
 	Vector3 newVec;
 	newVec.x = x - num;
 	newVec.y = y - num;
@@ -278,7 +278,7 @@ Vector3<T> Vector3<T>::operator - (T const& num) {
 }
 
 template<typename T>
-Vector3<T> Vector3<T>::operator - (Vector3 const& vec1) {
+Vector3<T> Vector3<T>::operator - (Vector3 const& vec1) const {
 	Vector3 newVec;
 	newVec.x = x - vec1.x;
 	newVec.y = y - vec1.y;
@@ -287,7 +287,7 @@ Vector3<T> Vector3<T>::operator - (Vector3 const& vec1) {
 }
 
 template<typename T>
-Vector3<T> Vector3<T>::operator * (T const& num) {
+Vector3<T> Vector3<T>::operator * (T const& num) const {
 	Vector3 newVec;
 	newVec.x = x * num;
 	newVec.y = y * num;
@@ -295,12 +295,12 @@ Vector3<T> Vector3<T>::operator * (T const& num) {
 	return newVec;
 }
 template<typename T>
-bool Vector3<T>::operator == (Vector3 const& vec1) {
+bool Vector3<T>::operator == (Vector3 const& vec1) const {
 	return (x == vec1.x) && (y == vec1.y) && (z == vec1.z);
 }
 
 template<typename T>
-bool Vector3<T>::operator != (Vector3 const& vec1) {
+bool Vector3<T>::operator != (Vector3 const& vec1) const {
 	return (x != vec1.x) && (y != vec1.y) && (z != vec1.z);
 }
 
@@ -798,4 +798,3 @@ template<typename T>
 T Det2(Vector2<T> a, Vector2<T> b) {
 	return a.x * b.y - a.y * b.x;
 }
-
